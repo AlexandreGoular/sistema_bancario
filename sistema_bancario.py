@@ -1,52 +1,64 @@
-# Saque deposito estrato
+class ContaBancaria:
+    def __init__(self, nome, saldo=0):
+        self.nome = nome
+        self.saldo = saldo
 
-saque = 0
-deposito = 0
-extrato = 0
-quantidadeSaqueDia = 0
-saques = []
-depositos = []
+    def depositar(self, valor):
+        self.saldo += valor
+        print(f'Depósito de {valor} realizado com sucesso.')
+    
+    def sacar(self, valor):
+        if self.saldo >= valor:
+            self.saldo -= valor
+            print(f'Saque de {valor} realizado com sucesso.')
+        else:
+            print('Saldo insuficiente para realizar o saque.')
 
-def opcoes():
-    print("[1] - Saque")
-    print("[2] - Deposito")
-    print("[3] - Extrato")
+    def extrato(self):
+        print(f'Extrato da conta de {self.nome}:')
+        print(f'Saldo atual: {self.saldo}')
 
-while (True):
+def cadastrar_conta():
+    nome = input('Digite o seu nome: ')
+    saldo_inicial = float(input('Digite o saldo inicial: '))
+    return ContaBancaria(nome, saldo_inicial)
 
-    opcoes()
+def main():
+    conta = None
+    while True:
+        print('\nBem-vindo ao Sistema Bancário')
+        print('1. Criar conta')
+        print('2. Depositar')
+        print('3. Sacar')
+        print('4. Extrato')
+        print('5. Sair')
 
-    usuarioDeseja = int(input("Qual operação deseja realizar: "))
+        opcao = input('Escolha uma opção: ')
 
-    if(usuarioDeseja == 1):
-        saqueUser = float(input("Qual o valor que deseja sacar: "))
-
-        if(saqueUser > deposito or saqueUser >= 500):
-            print("Não foi possivel sacar o dinheiro por falta de saldo")
+        if opcao == '1':
+            conta = cadastrar_conta()
+        elif opcao == '2':
+            if conta:
+                valor = float(input('Digite o valor a ser depositado: '))
+                conta.depositar(valor)
+            else:
+                print('Por favor, crie uma conta primeiro.')
+        elif opcao == '3':
+            if conta:
+                valor = float(input('Digite o valor a ser sacado: '))
+                conta.sacar(valor)
+            else:
+                print('Por favor, crie uma conta primeiro.')
+        elif opcao == '4':
+            if conta:
+                conta.extrato()
+            else:
+                print('Por favor, crie uma conta primeiro.')
+        elif opcao == '5':
+            print('Obrigado por utilizar o Sistema Bancário.')
             break
-        elif(quantidadeSaqueDia == 3):
-            print("Limite diario de saque atingido")
         else:
-            deposito -= saqueUser
-            print("Saque de R${} realizado com SUCESSO".format(saqueUser))
-            quantidadeSaqueDia += 1
-            saques.append(saqueUser)
-            print(" ")
+            print('Opção inválida. Por favor, escolha uma opção válida.')
 
-    elif(usuarioDeseja == 2):
-        depositoUser = float(input("Qual o valor que deseja depositar: "))
-
-        if(depositoUser <= 0):
-            print("Deposito Invalido")
-        else:
-            deposito += depositoUser
-            depositos.append(depositoUser)
-
-    elif (usuarioDeseja == 3):
-        print("Saques Realizados - ", saques)
-        print("Depositos Realizados - ", depositos)
-            
-        break
-    else:
-        print("Operação Invalida")
-        break
+if __name__ == "__main__":
+    main()
